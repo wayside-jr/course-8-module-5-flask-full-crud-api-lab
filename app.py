@@ -42,6 +42,15 @@ def create_event():
 # Update the title of an existing event
 @app.route("/events/<int:event_id>", methods=["PATCH"])
 def update_event(event_id):
+    data = request.get_json()
+
+    for event in events:
+        if event.id == event_id:
+            if "title" in data:
+                event.title = data["title"]
+            return jsonify(event.to_dict()), 200
+
+    return jsonify({"error": "Event not found"}), 404
     # TODO: Task 2 - Design and Develop the Code
 
     # TODO: Task 3 - Implement the Loop and Process Each Element
