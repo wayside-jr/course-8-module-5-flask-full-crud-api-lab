@@ -21,8 +21,18 @@ events = [
 # Create a new event from JSON input
 @app.route("/events", methods=["POST"])
 def create_event():
-    # TODO: Task 2 - Design and Develop the Code
+    data = request.get_json()
 
+    if not data or "title" not in data:
+        return jsonify({"error": "Title is required"}), 400
+
+    new_id = max([event.id for event in events], default=0) + 1
+
+    new_event = Event(id=new_id, title=data["title"])
+    events.append(new_event)
+
+    return jsonify(new_event.to_dict()), 201
+ 
     # TODO: Task 3 - Implement the Loop and Process Each Element
 
     # TODO: Task 4 - Return and Handle Results
@@ -51,4 +61,4 @@ def delete_event(event_id):
     pass
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5001 ,debug=True)
